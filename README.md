@@ -1,2 +1,4 @@
-# tubes-alpro
-Pembuatan Program CLI untuk memenuhi Tugas Besar Mata Kuliah Algoritma Pemrograman
+# APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE
+Created by Tazky Hafidzan & Ratna Bariatutamimah
+
+
