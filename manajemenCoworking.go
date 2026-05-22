@@ -30,21 +30,25 @@ type Ulasan struct {
 type tabCoworking [CoworkingMax]CoworkingSpace
 
 func main() {
+	mainMenu()
+}
+
+func mainMenu() {
 	var dataCoworking tabCoworking
 	var nData int
 
 	for {
-		fmt.Println("==========================================================")
-		fmt.Println("=     APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE     =")
-		fmt.Println("=                Created By Tazky & Ratna                =")
-		fmt.Println("=               Algoritma Pemrograman 2026               =")
-		fmt.Println("==========================================================")
-		fmt.Println("=          1. Lihat Daftar Co-Working Space              =")
-		fmt.Println("=          2. Tambah Daftar Co-Working Space             =")
-		fmt.Println("=          3. Edit Daftar Co-Working Space               =")
-		fmt.Println("=          4. Hapus Daftar Co-Working Space              =")
-		fmt.Println("=          5. Keluar                                     =")
-		fmt.Println("==========================================================")
+		fmt.Println("----------------------------------------------------------")
+		fmt.Println("|     APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE     |")
+		fmt.Println("|                Created By Tazky & Ratna                |")
+		fmt.Println("|               Algoritma Pemrograman 2026               |")
+		fmt.Println("----------------------------------------------------------")
+		fmt.Println("|          1. Lihat Daftar Co-Working Space              |")
+		fmt.Println("|          2. Tambah Daftar Co-Working Space             |")
+		fmt.Println("|          3. Edit Daftar Co-Working Space               |")
+		fmt.Println("|          4. Hapus Daftar Co-Working Space              |")
+		fmt.Println("|          5. Keluar                                     |")
+		fmt.Println("----------------------------------------------------------")
 
 		fmt.Print("Masukkan pilihan (1-5): ")
 		var pilihan int
@@ -63,10 +67,14 @@ func main() {
 		} else if pilihan == 5 {
 			break
 		} else {
-			fmt.Println("\nPilihan tidak valid!")
+			fmt.Println("Pilihan tidak valid!")
 			break
 		}
 	}
+}
+
+func ulasanMenu() {
+
 }
 
 func detailCoworking(A tabCoworking, n int) {
@@ -146,6 +154,7 @@ func tambahCoworking(A *tabCoworking, n *int) {
 		}
 
 		for i := 0; i < nFasilitas; i++ {
+			fmt.Printf("  Fasilitas %d: ", i+1)
 			fmt.Scan(&temp.Fasilitas[i])
 		}
 
@@ -311,10 +320,18 @@ func searchByID(A tabCoworking, n int, x string) int {
 	return idx
 }
 
-//func sequentialSearch() int {
+//func seqSearchByNama() int {
 //
 //}
 //
-//func binarySearch() int {
+//func seqSearchByLokasi() int {
+//
+//}
+//
+//func binSearchByNama() int {
+//
+//}
+//
+//func binSearchByLokasi() int {
 //
 //}
