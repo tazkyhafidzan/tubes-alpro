@@ -28,6 +28,7 @@ type Ulasan struct {
 }
 
 type tabCoworking [CoworkingMax]CoworkingSpace
+type tabUlasan [UlasanMax]Ulasan
 
 func main() {
 	mainMenu()
