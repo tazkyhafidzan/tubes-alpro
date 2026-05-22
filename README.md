@@ -27,5 +27,5 @@ Aplikasi ini mengimplementasikan struktur data terstruktur serta beberapa algori
 ## 🚀 Tech Stack
 * **Language:** Go (Golang)
 * **Paradigm:** Procedural / Structured Programming
-* 
+
 ---
