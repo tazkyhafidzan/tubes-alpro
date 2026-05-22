@@ -3,36 +3,35 @@ package main
 import "fmt"
 
 const (
-	NMAX         int = 1000
-	maxFasilitas int = 10
+	CoworkingMax = 1000
+	UlasanMax    = 1000
+	FasilitasMax = 10
 )
 
 type CoworkingSpace struct {
-	No              int
-	Nama            string
-	Lokasi          string
-	HargaSewa       int
-	Fasilitas       [maxFasilitas]string
-	JumlahFasilitas int
-	Rating          float64
+	ID           string
+	Nama         string
+	Lokasi       string
+	Fasilitas    [FasilitasMax]string
+	JmlFasilitas int
+	HargaSewa    int
+	Rating       float64
+	Ulasan       [UlasanMax]Ulasan
+	JmlUlasan    int
 }
 
 type Ulasan struct {
-	No        int
-	Nama      string
-	IsiUlasan string
-	Rating    float64
+	ID       string
+	Penulis  string
+	Komentar string
+	Rating   float64
 }
 
-type tabCoworking [NMAX]CoworkingSpace
-type tabUlasan [NMAX]Ulasan
-
-var nomorCoworking = 1
+type tabCoworking [CoworkingMax]CoworkingSpace
 
 func main() {
 	var dataCoworking tabCoworking
-	var nCoworking int
-	var pilihan int
+	var nData int
 
 	for {
 		fmt.Println("==========================================================")
@@ -48,34 +47,261 @@ func main() {
 		fmt.Println("==========================================================")
 
 		fmt.Print("Masukkan pilihan (1-5): ")
+		var pilihan int
 		fmt.Scan(&pilihan)
+		fmt.Println()
 
 		if pilihan == 1 {
-			lihatDaftarCoworking(dataCoworking, nCoworking)
-
-			if nCoworking != 0 {
-				lihatDetailCoworking(dataCoworking, nCoworking)
-			}
+			cetakCoworking(dataCoworking, nData)
+			detailCoworking(dataCoworking, nData)
 		} else if pilihan == 2 {
-			tambahCoworking(&dataCoworking, &nCoworking)
+			tambahCoworking(&dataCoworking, &nData)
 		} else if pilihan == 3 {
-			editCoworking(&dataCoworking, nCoworking)
+			editCoworking(&dataCoworking, nData)
 		} else if pilihan == 4 {
-
+			hapusCoworking(&dataCoworking, &nData)
 		} else if pilihan == 5 {
 			break
 		} else {
-			fmt.Println("\nPilihan tidak valid!\n")
+			fmt.Println("\nPilihan tidak valid!")
+			break
 		}
 	}
 }
 
-func cariIndeks(A tabCoworking, n, x int) int {
-	var idx = -1
-	var i = 0
+func detailCoworking(A tabCoworking, n int) {
+	for {
+		var x string
+		fmt.Print("Masukkan ID Co-Working Space untuk melihat detail, ketik 0 untuk kembali: ")
+		fmt.Scan(&x)
+
+		indeks := searchByID(A, n, x)
+
+		if x == "0" || indeks == -1 {
+			break
+		}
+
+		fmt.Println("---------------------------------------")
+		fmt.Println("        DETAIL CO-WORKING SPACE        ")
+		fmt.Println("---------------------------------------")
+		fmt.Printf("ID        : %s\n", A[indeks].ID)
+		fmt.Printf("Nama      : %s\n", A[indeks].Nama)
+		fmt.Printf("Lokasi    : %s\n", A[indeks].Lokasi)
+		fmt.Printf("Harga     : Rp%d\n", A[indeks].HargaSewa)
+		fmt.Printf("Rating    : %.1f\n", A[indeks].Rating)
+
+		fmt.Print("Fasilitas : ")
+		if A[indeks].JmlFasilitas == 0 {
+			fmt.Print("-")
+		}
+
+		for i := 0; i < A[indeks].JmlFasilitas; i++ {
+			if i > 0 {
+				fmt.Print(", ")
+			}
+			fmt.Print(A[indeks].Fasilitas[i])
+		}
+		fmt.Println("\n---------------------------------------\n")
+	}
+	fmt.Println()
+}
+
+func cetakCoworking(A tabCoworking, n int) {
+	fmt.Printf("%-5s | %-5s | %-20s | %-15s | %-10s | %-6s\n",
+		"No", "ID", "Nama", "Lokasi", "Harga Sewa", "Rating")
+	fmt.Println("----------------------------------------------------------------------------")
+
+	for i := 0; i < n; i++ {
+		fmt.Printf("%-5d | %-5s | %-20s | %-15s | Rp%-8d | %-6.1f\n",
+			i+1, A[i].ID, A[i].Nama, A[i].Lokasi, A[i].HargaSewa, A[i].Rating)
+	}
+	fmt.Println()
+}
+
+func tambahCoworking(A *tabCoworking, n *int) {
+	if *n > CoworkingMax {
+		*n = CoworkingMax
+	}
+
+	for {
+		var temp CoworkingSpace
+
+		fmt.Print("ID Co-Working space : ")
+		fmt.Scan(&temp.ID)
+		fmt.Print("Nama Co-Working space : ")
+		fmt.Scan(&temp.Nama)
+		fmt.Print("Lokasi                : ")
+		fmt.Scan(&temp.Lokasi)
+		fmt.Print("Harga sewa per hari   : ")
+		fmt.Scan(&temp.HargaSewa)
+		temp.Rating = 0
+
+		/* ------------------ Fasilitas ------------------ */
+		fmt.Print("Masukkan jumlah fasilitas (maks 10): ")
+		var nFasilitas int
+		fmt.Scan(&nFasilitas)
+
+		if nFasilitas > FasilitasMax {
+			nFasilitas = FasilitasMax
+		}
+
+		for i := 0; i < nFasilitas; i++ {
+			fmt.Scan(&temp.Fasilitas[i])
+		}
+
+		temp.JmlFasilitas = nFasilitas
+		/* ------------------ Fasilitas ------------------ */
+
+		A[*n] = temp
+		*n++
+
+		fmt.Printf("\nData Co-Working \"%s\" berhasil ditambahkan!\n\n", temp.Nama)
+
+		/* ============================================================================================================ */
+
+		fmt.Println("Apakah masih ada data yang ingin anda tambah?")
+		fmt.Println("1. Ya")
+		fmt.Println("2. Tidak")
+		fmt.Print("Masukkan pilihan : ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			continue
+		} else if pilihan == 2 {
+			break
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			break
+		}
+	}
+}
+
+func editCoworking(A *tabCoworking, n int) {
+	for {
+		cetakCoworking(*A, n)
+
+		var x string
+		fmt.Print("Masukkan ID Co-Working Space yang ingin diedit : ")
+		fmt.Scan(&x)
+
+		indeks := searchByID(*A, n, x)
+
+		idLama := A[indeks].ID
+		ulasanLama := A[indeks].Ulasan
+		jmlUlasanLama := A[indeks].JmlUlasan
+		ratingLama := A[indeks].Rating
+
+		fmt.Println("Masukkan data baru (semua field harus diisi ulang):")
+
+		fmt.Print("Nama baru        : ")
+		fmt.Scan(&A[indeks].Nama)
+
+		fmt.Print("Lokasi baru      : ")
+		fmt.Scan(&A[indeks].Lokasi)
+
+		fmt.Print("Harga sewa baru  : ")
+		fmt.Scan(&A[indeks].HargaSewa)
+
+		/* ------------------ Fasilitas ------------------ */
+		fmt.Print("Masukkan jumlah fasilitas baru (maks 10): ")
+		var nFasilitas int
+		fmt.Scan(&nFasilitas)
+
+		if nFasilitas > FasilitasMax {
+			nFasilitas = FasilitasMax
+		}
+
+		for i := 0; i < FasilitasMax; i++ {
+			A[indeks].Fasilitas[i] = ""
+		}
+
+		for i := 0; i < nFasilitas; i++ {
+			fmt.Printf("  Fasilitas %d: ", i+1)
+			fmt.Scan(&A[indeks].Fasilitas[i])
+		}
+
+		A[indeks].JmlFasilitas = nFasilitas
+		/* ------------------ Fasilitas ------------------ */
+
+		A[indeks].ID = idLama
+		A[indeks].Ulasan = ulasanLama
+		A[indeks].JmlUlasan = jmlUlasanLama
+		A[indeks].Rating = ratingLama
+
+		fmt.Println("\n✅ Data berhasil diperbarui!\n")
+
+		/* ============================================================================================================ */
+
+		fmt.Println("Apakah masih ada data yang ingin anda edit?")
+		fmt.Println("1. Ya")
+		fmt.Println("2. Tidak")
+		fmt.Print("Masukkan pilihan : ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			continue
+		} else if pilihan == 2 {
+			break
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			break
+		}
+	}
+}
+
+func hapusCoworking(A *tabCoworking, n *int) {
+	for {
+		cetakCoworking(*A, *n)
+
+		var x string
+		fmt.Print("Masukkan ID Co-Working Space yang ingin dihapus : ")
+		fmt.Scan(&x)
+
+		indeks := searchByID(*A, *n, x)
+
+		if indeks != -1 {
+			for i := indeks; i < *n-1; i++ {
+				A[i] = A[i+1]
+			}
+			*n--
+		} else {
+			fmt.Println("Data tidak ditemukan")
+		}
+		fmt.Printf("\n✅ Co-working space \"%s\" berhasil dihapus!\n\n", A[indeks].Nama)
+
+		/* ============================================================================================================ */
+
+		fmt.Println("Apakah masih ada data yang ingin anda hapus?")
+		fmt.Println("1. Ya")
+		fmt.Println("2. Tidak")
+		fmt.Print("Masukkan pilihan : ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			continue
+		} else if pilihan == 2 {
+			break
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			break
+		}
+	}
+}
+
+func searchByID(A tabCoworking, n int, x string) int {
+	var idx, i int
+
+	idx = -1
+	i = 0
 
 	for idx == -1 && i < n {
-		if A[i].No == x {
+		if A[i].ID == x {
 			idx = i
 		}
 
@@ -85,151 +311,10 @@ func cariIndeks(A tabCoworking, n, x int) int {
 	return idx
 }
 
-func lihatDaftarCoworking(A tabCoworking, n int) {
-	if n == 0 {
-		fmt.Println("\n=================================================================")
-		fmt.Println("\nBelum ada data co-working space.\n")
-		fmt.Println("=================================================================\n")
-		return
-	}
-
-	fmt.Println("\n=================================================================")
-	fmt.Printf("%-5s %-20s %-15s %-10s %-6s\n", "NO", "Nama", "Lokasi", "Harga", "Rating")
-	fmt.Println("------------------------------------------------------------------")
-
-	for i := 0; i < n; i++ {
-		fmt.Printf("%-5d %-20s %-15s Rp%-10d %-6.1f\n",
-			A[i].No, A[i].Nama, A[i].Lokasi, A[i].HargaSewa, A[i].Rating)
-
-	}
-	fmt.Println("=================================================================\n")
-}
-
-func lihatDetailCoworking(A tabCoworking, n int) {
-	for {
-		fmt.Print("\nMasukkan nomor Co-Working untuk melihat detail, ketik 0 untuk kembali: ")
-		var nomor int
-		fmt.Scan(&nomor)
-
-		if nomor == 0 {
-			break
-		}
-
-		var idx = cariIndeks(A, n, nomor)
-		fmt.Println("\n=== DETAIL CO-WORKING SPACE ===")
-		fmt.Printf("No        : %d\n", A[idx].No)
-		fmt.Printf("Nama      : %s\n", A[idx].Nama)
-		fmt.Printf("Lokasi    : %s\n", A[idx].Lokasi)
-		fmt.Printf("Harga     : Rp%d\n", A[idx].HargaSewa)
-		fmt.Printf("Rating    : %.1f\n", A[idx].Rating)
-
-		fmt.Print("Fasilitas : ")
-		if A[idx].JumlahFasilitas == 0 {
-			fmt.Print("-")
-		}
-
-		for i := 0; i < A[idx].JumlahFasilitas; i++ {
-			if i > 0 {
-				fmt.Print(", ")
-			}
-			fmt.Print(A[idx].Fasilitas[i])
-		}
-		fmt.Println("\n===============================\n")
-	}
-	fmt.Println()
-}
-
-func tambahCoworking(A *tabCoworking, n *int) {
-	if *n >= NMAX {
-		*n = NMAX
-		fmt.Println("\n=================================================================")
-		fmt.Println("\nData sudah penuh!\nTidak bisa menambah data!\n")
-		fmt.Println("=================================================================")
-		return
-	}
-
-	var temp CoworkingSpace
-
-	temp.No = nomorCoworking
-	nomorCoworking++
-
-	fmt.Println("\n=================================================================")
-	fmt.Print("Nama co-working space : ")
-	fmt.Scan(&temp.Nama)
-	fmt.Print("Lokasi                : ")
-	fmt.Scan(&temp.Lokasi)
-	fmt.Print("Harga sewa per hari   : ")
-	fmt.Scan(&temp.HargaSewa)
-	temp.Rating = 0
-
-	fmt.Print("Masukkan jumlah fasilitas (maks 10): ")
-	var nFasilitas int
-	fmt.Scan(&nFasilitas)
-
-	if nFasilitas > maxFasilitas {
-		nFasilitas = maxFasilitas
-	}
-
-	for i := 0; i < nFasilitas; i++ {
-		fmt.Scan(&temp.Fasilitas[i])
-	}
-
-	temp.JumlahFasilitas = nFasilitas
-
-	A[*n] = temp
-	*n++
-
-	fmt.Printf("\nData Co-Working \"%s\" berhasil ditambahkan!\n\n", temp.Nama)
-}
-
-func editCoworking(A *tabCoworking, n int) {
-	if n == 0 {
-		fmt.Println("\n=================================================================")
-		fmt.Println("\nBelum ada data co-working space.\n")
-		fmt.Println("=================================================================\n")
-		return
-	}
-
-	lihatDaftarCoworking(*A, n)
-
-	fmt.Print("\nMasukkan nomor Co-Working yang ingin diedit, ketik 0 untuk kembali: ")
-	var nomor int
-	fmt.Scan(&nomor)
-
-	if nomor == 0 {
-		return
-	}
-
-	var idx = cariIndeks(*A, n, nomor)
-	var temp = A[idx]
-
-	fmt.Println("Ketik data baru untuk mengubah, ketik '-' jika tidak ingin mengubah")
-	fmt.Printf("Nama [%s]: ", temp.Nama)
-	var input string
-	fmt.Scan(&input)
-	if input != "-" {
-		temp.Nama = input
-	}
-
-	fmt.Printf("Lokasi [%s]: ", temp.Lokasi)
-	fmt.Scan(&input)
-	if input != "-" {
-		temp.Lokasi = input
-	}
-
-	fmt.Printf("Harga sewa [%d]: ", temp.HargaSewa)
-	var harga int
-	fmt.Scan(&harga)
-	if harga > 0 {
-		temp.HargaSewa = harga
-	}
-
-	A[idx] = temp
-
-	fmt.Println("\nData berhasil diperbarui!")
-	fmt.Println("=================================================================\n")
-}
-
-func hapusCoworking() {
-
-}
+//func sequentialSearch() int {
+//
+//}
+//
+//func binarySearch() int {
+//
+//}
