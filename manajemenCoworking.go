@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 const (
 	CoworkingMax = 1000
@@ -48,7 +51,8 @@ func mainMenu() {
 		fmt.Println("|          2. Tambah Daftar Co-Working Space             |")
 		fmt.Println("|          3. Edit Daftar Co-Working Space               |")
 		fmt.Println("|          4. Hapus Daftar Co-Working Space              |")
-		fmt.Println("|          5. Keluar                                     |")
+		fmt.Println("|          5. Cari Co-Working Space                      |")
+		fmt.Println("|          6. Keluar                                     |")
 		fmt.Println("----------------------------------------------------------")
 
 		fmt.Print("Masukkan pilihan (1-5): ")
@@ -66,6 +70,8 @@ func mainMenu() {
 		} else if pilihan == 4 {
 			hapusCoworking(&dataCoworking, &nData)
 		} else if pilihan == 5 {
+			cariMenu()
+		} else if pilihan == 6 {
 			break
 		} else {
 			fmt.Println("Pilihan tidak valid!")
@@ -76,6 +82,10 @@ func mainMenu() {
 
 func ulasanMenu() {
 
+}
+
+func cariMenu() {
+	
 }
 
 func detailCoworking(A tabCoworking, n int) {
@@ -321,9 +331,23 @@ func searchByID(A tabCoworking, n int, x string) int {
 	return idx
 }
 
-//func seqSearchByNama() int {
-//
-//}
+/*func seqSearchByNama(A tabCoworking, n int, x string) string {
+	var idx, i int
+
+	idx = -1
+	i = 0
+
+	for idx == -1 && i < n {
+		if strings.ToLower(A[i].Nama) == x {
+			idx = i
+		}
+
+		i++
+	}
+
+	return A[idx].Nama
+
+}
 //
 //func seqSearchByLokasi() int {
 //
