@@ -347,7 +347,7 @@ func searchByID(A tabCoworking, n int, x string) int {
 
 	return A[idx].Nama
 
-}
+}*/
 //
 //func seqSearchByLokasi() int {
 //
