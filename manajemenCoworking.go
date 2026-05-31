@@ -74,8 +74,33 @@ func mainMenu() {
 	}
 }
 
-func ulasanMenu() {
+func ulasanMenu(A tabCoworking, n int) {
+	for {
+		var x string
+		fmt.Print("masukan ID Co-working Space untuk melihat ulasan, ketik 0 untuk kembali: ")
+		fmt.Scan(&x)
 
+		indeks := searchByID(A, n, x)
+		if x == "0" || indeks == -1 {
+			break
+		}
+
+		fmt.Println("--------------------------------------------------")
+		fmt.Println("               ULASAN CO-WORKING SPACE            ")
+		fmt.Println("--------------------------------------------------")
+		fmt.Printf("Nama Co-Working : %s\n", A[indeks].Nama)
+		fmt.Println("Daftar Ulasan   :")
+
+		if A[indeks].JmlUlasan == 0 {
+			fmt.Println("-belum ada ulasan untuk tempat ini-")
+		} else {
+			for i := 0; i < A[indeks].JmlUlasan; i++ {
+				fmt.Printf("%d, %s\n", i+1, A[indeks].Ulasan[i])
+			}
+		}
+
+		fmt.Println("--------------------------------------------------\n")
+	}
 }
 
 func detailCoworking(A tabCoworking, n int) {
