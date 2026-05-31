@@ -109,17 +109,154 @@ func ulasanMenu(A tabCoworking, n int) {
 		fmt.Println("               ULASAN CO-WORKING SPACE            ")
 		fmt.Println("--------------------------------------------------")
 		fmt.Printf("Nama Co-Working : %s\n", A[indeks].Nama)
-		fmt.Println("Daftar Ulasan   :")
+		fmt.Println("1. Lihat ulasan")
+		fmt.Println("2. Tambah ulasan")
+		fmt.Println("3. Edit ulasan")
+		fmt.Println("4. hapus ulasan")
+		fmt.Println("0. kembali")
 
-		if A[indeks].JmlUlasan == 0 {
-			fmt.Println("-belum ada ulasan untuk tempat ini-")
+		var pilihan string
+		fmt.Print("Masukkan pilihan menu (0-4): ")
+		fmt.Scan(&pilihan)
+
+		if pilihan == "0" {
+			break
+		} else if pilihan == "1" {
+			lihatUlasan(A, n)
+		} else if pilihan == "2" {
+			tambahUlasan(&A, n)
+		} else if pilihan == "3" {
+			editUlasan(&A, n)
+		} else if pilihan == "4" {
+			hapusUlasan(&A, n)
 		} else {
-			for i := 0; i < A[indeks].JmlUlasan; i++ {
-				fmt.Printf("%d, %s\n", i+1, A[indeks].Ulasan[i])
-			}
+			fmt.Println("Pilihan tidak valid, coba lagi ya.")
 		}
 
-		fmt.Println("--------------------------------------------------\n")
+	}
+}
+
+func lihatUlasan(A tabCoworking, n int) {
+	var id string
+	fmt.Print("\nMasukkan ID Co-Working Space untuk melihat ulasan: ")
+	fmt.Scan(&id)
+
+	indeks := searchByID(A, n, id)
+
+	if indeks == -1 {
+		fmt.Println("Gagal: ID tidak ditemukan!")
+		return
+	}
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Printf("Daftar Ulasan untuk %s:\n", A[indeks].Nama)
+
+	if A[indeks].JmlUlasan == 0 {
+		fmt.Println("- Belum ada ulasan -")
+	} else {
+		for i := 0; i < A[indeks].JmlUlasan; i++ {
+			fmt.Printf("%d. %s\n", i+1, A[indeks].Ulasan[i])
+		}
+	}
+	fmt.Println("--------------------------------------------------")
+}
+
+func tambahUlasan(A *tabCoworking, n int) {
+	var id string
+	fmt.Print("\nMasukkan ID Co-Working Space yang mau ditambahkan ulasannya: ")
+	fmt.Scan(&id)
+
+	indeks := searchByID(*A, n, id)
+
+	if indeks == -1 {
+		fmt.Println("Gagal: ID tidak ditemukan!")
+		return
+	}
+
+	var ulasanBaru string
+	fmt.Print("Ketik ulasan kamu (Gunakan _ untuk spasi jika pakai fmt.Scan): ")
+	fmt.Scan(&ulasanBaru)
+
+	(*A)[indeks].Ulasan[(*A)[indeks].JmlUlasan].Komentar = ulasanBaru
+	(*A)[indeks].JmlUlasan++
+
+	fmt.Println("Mantap, ulasan berhasil ditambahkan!")
+}
+
+func editUlasan(A *tabCoworking, n int) {
+	var id string
+	fmt.Print("\nMasukkan ID Co-Working Space yang ulasannya mau diedit: ")
+	fmt.Scan(&id)
+
+	indeks := searchByID(*A, n, id)
+
+	if indeks == -1 {
+		fmt.Println("Gagal: ID tidak ditemukan!")
+		return
+	}
+
+	if (*A)[indeks].JmlUlasan == 0 {
+		fmt.Println("Gagal: Tempat ini belum memiliki ulasan untuk diedit.")
+		return
+	}
+
+	fmt.Println("Daftar Ulasan saat ini:")
+	for i := 0; i < (*A)[indeks].JmlUlasan; i++ {
+		fmt.Printf("%d. %s\n", i+1, (*A)[indeks].Ulasan[i])
+	}
+
+	var noUlasan int
+	fmt.Print("Masukkan NOMOR ulasan yang mau diedit: ")
+	fmt.Scan(&noUlasan)
+
+	if noUlasan > 0 && noUlasan <= (*A)[indeks].JmlUlasan {
+		var ulasanBaru string
+		fmt.Print("Ketik ulasan baru: ")
+		fmt.Scan(&ulasanBaru)
+
+		(*A)[indeks].Ulasan[noUlasan-1].Komentar = ulasanBaru
+		fmt.Println("Sip, ulasan berhasil diperbarui!")
+	} else {
+		fmt.Println("Gagal: Nomor ulasan tidak valid.")
+	}
+}
+
+func hapusUlasan(A *tabCoworking, n int) {
+	var id string
+	fmt.Print("\nMasukkan ID Co-Working Space yang ulasannya mau dihapus: ")
+	fmt.Scan(&id)
+
+	indeks := searchByID(*A, n, id)
+
+	if indeks == -1 {
+		fmt.Println("Gagal: ID tidak ditemukan!")
+		return
+	}
+
+	if (*A)[indeks].JmlUlasan == 0 {
+		fmt.Println("Gagal: Tempat ini belum memiliki ulasan untuk dihapus.")
+		return
+	}
+
+	fmt.Println("Daftar Ulasan saat ini:")
+	for i := 0; i < (*A)[indeks].JmlUlasan; i++ {
+		fmt.Printf("%d. %s\n", i+1, (*A)[indeks].Ulasan[i])
+	}
+
+	var noUlasan int
+	fmt.Print("Masukkan NOMOR ulasan yang mau dihapus: ")
+	fmt.Scan(&noUlasan)
+
+	if noUlasan > 0 && noUlasan <= (*A)[indeks].JmlUlasan {
+
+		for i := noUlasan - 1; i < (*A)[indeks].JmlUlasan-1; i++ {
+			(*A)[indeks].Ulasan[i] = (*A)[indeks].Ulasan[i+1]
+		}
+
+		(*A)[indeks].JmlUlasan--
+		fmt.Println("Ulasan berhasil dihapus secara permanen!")
+	} else {
+		fmt.Println("Gagal: Nomor ulasan tidak valid.")
 	}
 }
 
