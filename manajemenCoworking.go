@@ -548,14 +548,10 @@ func searchByNama(A tabCoworking, n int, x string) int {
 	return idx
 }
 
-//func seqSearchByLokasi() int {
-//
-//}
-//
-//func binSearchByNama() int {
-//
-//}
-//
 //func binSearchByLokasi() int {
+//
+//}
+//
+//func sorting() {
 //
 //}
