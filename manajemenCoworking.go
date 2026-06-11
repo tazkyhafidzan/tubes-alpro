@@ -23,14 +23,13 @@ type CoworkingSpace struct {
 }
 
 type Ulasan struct {
-	ID       string
+	ID       int
 	Penulis  string
 	Komentar string
 	Rating   float64
 }
 
 type tabCoworking [CoworkingMax]CoworkingSpace
-type tabUlasan [UlasanMax]Ulasan
 
 func main() {
 	// Data Dummy
@@ -49,8 +48,8 @@ func main() {
 		Rating:       4.5,
 		JmlUlasan:    2,
 	}
-	dataCoworking[0].Ulasan[0] = Ulasan{ID: "U001", Penulis: "Budi", Komentar: "Tempat nyaman", Rating: 4.5}
-	dataCoworking[0].Ulasan[1] = Ulasan{ID: "U002", Penulis: "Siti", Komentar: "Internet cepat", Rating: 4.5}
+	dataCoworking[0].Ulasan[0] = Ulasan{ID: 1, Penulis: "Budi", Komentar: "Tempat nyaman", Rating: 4.5}
+	dataCoworking[0].Ulasan[1] = Ulasan{ID: 2, Penulis: "Siti", Komentar: "Internet cepat", Rating: 4.5}
 
 	dataCoworking[1] = CoworkingSpace{
 		ID:           "CS002",
@@ -62,7 +61,7 @@ func main() {
 		Rating:       4.8,
 		JmlUlasan:    1,
 	}
-	dataCoworking[1].Ulasan[0] = Ulasan{ID: "U003", Penulis: "Andi", Komentar: "Tenang sekali", Rating: 4.8}
+	dataCoworking[1].Ulasan[0] = Ulasan{ID: 1, Penulis: "Andi", Komentar: "Tenang sekali", Rating: 4.8}
 
 	dataCoworking[2] = CoworkingSpace{
 		ID:           "CS003",
@@ -74,7 +73,7 @@ func main() {
 		Rating:       4.2,
 		JmlUlasan:    1,
 	}
-	dataCoworking[2].Ulasan[0] = Ulasan{ID: "U004", Penulis: "Rian", Komentar: "Murah dan strategis", Rating: 4.2}
+	dataCoworking[2].Ulasan[0] = Ulasan{ID: 1, Penulis: "Rian", Komentar: "Murah dan strategis", Rating: 4.2}
 
 	dataCoworking[3] = CoworkingSpace{
 		ID:           "CS004",
@@ -86,7 +85,7 @@ func main() {
 		Rating:       4.0,
 		JmlUlasan:    1,
 	}
-	dataCoworking[3].Ulasan[0] = Ulasan{ID: "U005", Penulis: "Dewi", Komentar: "Standar tapi oke", Rating: 4.0}
+	dataCoworking[3].Ulasan[0] = Ulasan{ID: 1, Penulis: "Dewi", Komentar: "Standar tapi oke", Rating: 4.0}
 
 	dataCoworking[4] = CoworkingSpace{
 		ID:           "CS005",
@@ -98,7 +97,7 @@ func main() {
 		Rating:       4.6,
 		JmlUlasan:    1,
 	}
-	dataCoworking[4].Ulasan[0] = Ulasan{ID: "U006", Penulis: "Eko", Komentar: "Fasilitas lengkap", Rating: 4.6}
+	dataCoworking[4].Ulasan[0] = Ulasan{ID: 1, Penulis: "Eko", Komentar: "Fasilitas lengkap", Rating: 4.6}
 
 	dataCoworking[5] = CoworkingSpace{
 		ID:           "CS006",
@@ -110,7 +109,7 @@ func main() {
 		Rating:       4.3,
 		JmlUlasan:    1,
 	}
-	dataCoworking[5].Ulasan[0] = Ulasan{ID: "U007", Penulis: "Mega", Komentar: "Kopinya enak", Rating: 4.3}
+	dataCoworking[5].Ulasan[0] = Ulasan{ID: 1, Penulis: "Mega", Komentar: "Kopinya enak", Rating: 4.3}
 
 	dataCoworking[6] = CoworkingSpace{
 		ID:           "CS007",
@@ -122,7 +121,7 @@ func main() {
 		Rating:       4.9,
 		JmlUlasan:    1,
 	}
-	dataCoworking[6].Ulasan[0] = Ulasan{ID: "U008", Penulis: "John", Komentar: "Great view and internet", Rating: 4.9}
+	dataCoworking[6].Ulasan[0] = Ulasan{ID: 1, Penulis: "John", Komentar: "Great view and internet", Rating: 4.9}
 
 	dataCoworking[7] = CoworkingSpace{
 		ID:           "CS008",
@@ -134,7 +133,7 @@ func main() {
 		Rating:       4.1,
 		JmlUlasan:    1,
 	}
-	dataCoworking[7].Ulasan[0] = Ulasan{ID: "U009", Penulis: "Ali", Komentar: "Cukup memuaskan", Rating: 4.1}
+	dataCoworking[7].Ulasan[0] = Ulasan{ID: 1, Penulis: "Ali", Komentar: "Cukup memuaskan", Rating: 4.1}
 
 	mainMenu(dataCoworking, nData)
 }
@@ -152,11 +151,13 @@ func mainMenu(dataCoworking tabCoworking, nData int) {
 		fmt.Println("|          2. Tambah Daftar Co-Working Space             |")
 		fmt.Println("|          3. Edit Daftar Co-Working Space               |")
 		fmt.Println("|          4. Hapus Daftar Co-Working Space              |")
-		fmt.Println("|          5. Cari Co-Working Space                      |")
-		fmt.Println("|          6. Keluar                                     |")
+		fmt.Println("|          5. Kelola Ulasan                              |")
+		fmt.Println("|          6. Pencarian                                  |")
+		fmt.Println("|          7. Pengurutan                                 |")
+		fmt.Println("|          0. Keluar                                     |")
 		fmt.Println("----------------------------------------------------------")
 
-		fmt.Print("Masukkan pilihan (1-5): ")
+		fmt.Print("Masukkan pilihan (1-7), ketik 0 untuk keluar: ")
 		var pilihan int
 		fmt.Scan(&pilihan)
 		fmt.Println()
@@ -185,178 +186,17 @@ func mainMenu(dataCoworking tabCoworking, nData int) {
 		} else if pilihan == 4 {
 			hapusCoworking(&dataCoworking, &nData)
 		} else if pilihan == 5 {
-			cariMenu(dataCoworking, nData)
+			ulasanMenu(&dataCoworking, nData)
 		} else if pilihan == 6 {
+			cariMenu(dataCoworking, nData)
+		} else if pilihan == 7 {
+			sortMenu(dataCoworking, nData)
+		} else if pilihan == 0 {
+			fmt.Println("Terima kasih sudah menggunakan aplikasi ini")
 			lanjut = false
 		} else {
 			fmt.Println("Pilihan tidak valid!")
 		}
-	}
-}
-
-func ulasanMenu(A tabCoworking, n int) {
-	for {
-		var x string
-		fmt.Print("masukan ID Co-working Space untuk melihat ulasan, ketik 0 untuk kembali: ")
-		fmt.Scan(&x)
-
-		indeks := searchByID(A, n, x)
-		if x == "0" || indeks == -1 {
-			break
-		}
-
-		fmt.Println("--------------------------------------------------")
-		fmt.Println("               ULASAN CO-WORKING SPACE            ")
-		fmt.Println("--------------------------------------------------")
-		fmt.Printf("Nama Co-Working : %s\n", A[indeks].Nama)
-		fmt.Println("1. Lihat ulasan")
-		fmt.Println("2. Tambah ulasan")
-		fmt.Println("3. Edit ulasan")
-		fmt.Println("4. hapus ulasan")
-		fmt.Println("0. kembali")
-
-		var pilihan string
-		fmt.Print("Masukkan pilihan menu (0-4): ")
-		fmt.Scan(&pilihan)
-
-		if pilihan == "0" {
-			break
-		} else if pilihan == "1" {
-			lihatUlasan(A, n)
-		} else if pilihan == "2" {
-			tambahUlasan(&A, n)
-		} else if pilihan == "3" {
-			editUlasan(&A, n)
-		} else if pilihan == "4" {
-			hapusUlasan(&A, n)
-		} else {
-			fmt.Println("Pilihan tidak valid, coba lagi ya.")
-		}
-
-	}
-}
-
-func lihatUlasan(A tabCoworking, n int) {
-	var id string
-	fmt.Print("\nMasukkan ID Co-Working Space untuk melihat ulasan: ")
-	fmt.Scan(&id)
-
-	indeks := searchByID(A, n, id)
-
-	if indeks == -1 {
-		fmt.Println("Gagal: ID tidak ditemukan!")
-		return
-	}
-
-	fmt.Println("--------------------------------------------------")
-	fmt.Printf("Daftar Ulasan untuk %s:\n", A[indeks].Nama)
-
-	if A[indeks].JmlUlasan == 0 {
-		fmt.Println("- Belum ada ulasan -")
-	} else {
-		for i := 0; i < A[indeks].JmlUlasan; i++ {
-			fmt.Printf("%d. %s\n", i+1, A[indeks].Ulasan[i])
-		}
-	}
-	fmt.Println("--------------------------------------------------")
-}
-
-func tambahUlasan(A *tabCoworking, n int) {
-	var id string
-	fmt.Print("\nMasukkan ID Co-Working Space yang mau ditambahkan ulasannya: ")
-	fmt.Scan(&id)
-
-	indeks := searchByID(*A, n, id)
-
-	if indeks == -1 {
-		fmt.Println("Gagal: ID tidak ditemukan!")
-		return
-	}
-
-	var ulasanBaru string
-	fmt.Print("Ketik ulasan kamu (Gunakan _ untuk spasi jika pakai fmt.Scan): ")
-	fmt.Scan(&ulasanBaru)
-
-	(*A)[indeks].Ulasan[(*A)[indeks].JmlUlasan].Komentar = ulasanBaru
-	(*A)[indeks].JmlUlasan++
-
-	fmt.Println("Mantap, ulasan berhasil ditambahkan!")
-}
-
-func editUlasan(A *tabCoworking, n int) {
-	var id string
-	fmt.Print("\nMasukkan ID Co-Working Space yang ulasannya mau diedit: ")
-	fmt.Scan(&id)
-
-	indeks := searchByID(*A, n, id)
-
-	if indeks == -1 {
-		fmt.Println("Gagal: ID tidak ditemukan!")
-		return
-	}
-
-	if (*A)[indeks].JmlUlasan == 0 {
-		fmt.Println("Gagal: Tempat ini belum memiliki ulasan untuk diedit.")
-		return
-	}
-
-	fmt.Println("Daftar Ulasan saat ini:")
-	for i := 0; i < (*A)[indeks].JmlUlasan; i++ {
-		fmt.Printf("%d. %s\n", i+1, (*A)[indeks].Ulasan[i])
-	}
-
-	var noUlasan int
-	fmt.Print("Masukkan NOMOR ulasan yang mau diedit: ")
-	fmt.Scan(&noUlasan)
-
-	if noUlasan > 0 && noUlasan <= (*A)[indeks].JmlUlasan {
-		var ulasanBaru string
-		fmt.Print("Ketik ulasan baru: ")
-		fmt.Scan(&ulasanBaru)
-
-		(*A)[indeks].Ulasan[noUlasan-1].Komentar = ulasanBaru
-		fmt.Println("Sip, ulasan berhasil diperbarui!")
-	} else {
-		fmt.Println("Gagal: Nomor ulasan tidak valid.")
-	}
-}
-
-func hapusUlasan(A *tabCoworking, n int) {
-	var id string
-	fmt.Print("\nMasukkan ID Co-Working Space yang ulasannya mau dihapus: ")
-	fmt.Scan(&id)
-
-	indeks := searchByID(*A, n, id)
-
-	if indeks == -1 {
-		fmt.Println("Gagal: ID tidak ditemukan!")
-		return
-	}
-
-	if (*A)[indeks].JmlUlasan == 0 {
-		fmt.Println("Gagal: Tempat ini belum memiliki ulasan untuk dihapus.")
-		return
-	}
-
-	fmt.Println("Daftar Ulasan saat ini:")
-	for i := 0; i < (*A)[indeks].JmlUlasan; i++ {
-		fmt.Printf("%d. %s\n", i+1, (*A)[indeks].Ulasan[i])
-	}
-
-	var noUlasan int
-	fmt.Print("Masukkan NOMOR ulasan yang mau dihapus: ")
-	fmt.Scan(&noUlasan)
-
-	if noUlasan > 0 && noUlasan <= (*A)[indeks].JmlUlasan {
-
-		for i := noUlasan - 1; i < (*A)[indeks].JmlUlasan-1; i++ {
-			(*A)[indeks].Ulasan[i] = (*A)[indeks].Ulasan[i+1]
-		}
-
-		(*A)[indeks].JmlUlasan--
-		fmt.Println("Ulasan berhasil dihapus secara permanen!")
-	} else {
-		fmt.Println("Gagal: Nomor ulasan tidak valid.")
 	}
 }
 
@@ -372,7 +212,7 @@ func cariMenu(A tabCoworking, n int) {
 		fmt.Println("|                   Cari berdasarkan:                    |")
 		fmt.Println("|                       1. Nama                          |")
 		fmt.Println("|                       2. Lokasi                        |")
-		fmt.Println("|                       0. Kembali                        |")
+		fmt.Println("|                       0. Kembali                       |")
 		fmt.Println("----------------------------------------------------------")
 
 		fmt.Print("Masukkan pilihan (1-2) atau ketik 0 untuk kembali: ")
@@ -439,6 +279,78 @@ func cariMenu(A tabCoworking, n int) {
 	}
 }
 
+func sortMenu(A tabCoworking, n int) {
+	var lanjut bool = true
+
+	for lanjut {
+		fmt.Println("----------------------------------------------------------")
+		fmt.Println("|     APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE     |")
+		fmt.Println("|                Created By Tazky & Ratna                |")
+		fmt.Println("|               Algoritma Pemrograman 2026               |")
+		fmt.Println("----------------------------------------------------------")
+		fmt.Println("|                   Urutkan berdasarkan:                 |")
+		fmt.Println("|                       1. Harga Sewa                    |")
+		fmt.Println("|                       2. Rating                        |")
+		fmt.Println("|                       0. Kembali                       |")
+		fmt.Println("----------------------------------------------------------")
+
+		fmt.Print("Masukkan pilihan (1-2) atau ketik 0 untuk kembali: ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			sortingHargaSewa(&A, n)
+			cetakCoworking(A, n)
+
+		} else if pilihan == 2 {
+			sortingRating(&A, n)
+			cetakCoworking(A, n)
+
+		} else if pilihan == 0 {
+			lanjut = false
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			lanjut = false
+		}
+	}
+}
+
+func ulasanMenu(A *tabCoworking, n int) {
+	var lanjut bool = true
+
+	for lanjut {
+		fmt.Println("----------------------------------------------------------")
+		fmt.Println("|     APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE     |")
+		fmt.Println("|                Created By Tazky & Ratna                |")
+		fmt.Println("|               Algoritma Pemrograman 2026               |")
+		fmt.Println("----------------------------------------------------------")
+		fmt.Println("|              MENU ULASAN CO-WORKING SPACE              |")
+		fmt.Println("|                   1. Tambah Ulasan                     |")
+		fmt.Println("|                   2. Edit Ulasan                       |")
+		fmt.Println("|                   3. Hapus Ulasan                      |")
+		fmt.Println("|                   0. Kembali                           |")
+		fmt.Println("----------------------------------------------------------")
+
+		fmt.Print("Masukkan pilihan (1-2) atau ketik 0 untuk kembali: ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			tambahUlasan(A, &n)
+		} else if pilihan == 2 {
+			editUlasan(A, n)
+		} else if pilihan == 3 {
+			hapusUlasan(A, n)
+		} else if pilihan == 0 {
+			lanjut = false
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+		}
+	}
+}
+
 func detailCoworking(A tabCoworking, indeks int) {
 	fmt.Println("---------------------------------------")
 	fmt.Println("        DETAIL CO-WORKING SPACE        ")
@@ -469,7 +381,7 @@ func detailCoworking(A tabCoworking, indeks int) {
 		fmt.Println("---------------------------------------")
 		for i := 0; i < A[indeks].JmlUlasan; i++ {
 			u := A[indeks].Ulasan[i]
-			fmt.Printf("  [%s] %s (%.1f★)\n", u.ID, u.Penulis, u.Rating)
+			fmt.Printf("  [%d] %s (%.1f★)\n", u.ID, u.Penulis, u.Rating)
 			fmt.Printf("       \"%s\"\n", u.Komentar)
 		}
 	}
@@ -665,6 +577,212 @@ func hapusCoworking(A *tabCoworking, n *int) {
 	}
 }
 
+func cetakUlasan(dataCoworking *CoworkingSpace) {
+	fmt.Println("\n--- Daftar Ulasan Saat Ini ---")
+	for i := 0; i < dataCoworking.JmlUlasan; i++ {
+		u := dataCoworking.Ulasan[i]
+		fmt.Printf("%d. [%d] Oleh: %s | \"%s\" (Rating: %.1f)\n", i+1, u.ID, u.Penulis, u.Komentar, u.Rating)
+	}
+	fmt.Println()
+}
+
+func tambahUlasan(A *tabCoworking, n *int) {
+	for {
+		cetakCoworking(*A, *n)
+
+		var id string
+		fmt.Print("\nMasukkan ID Co-Working Space yang mau ditambahkan ulasannya: ")
+		fmt.Scan(&id)
+
+		indeks := searchByID(*A, *n, id)
+
+		if indeks == -1 {
+			fmt.Println("Gagal: ID tidak ditemukan!")
+			return
+		}
+
+		var dataCoworking = &A[indeks]
+		cetakUlasan(dataCoworking)
+
+		fmt.Println("Tambahkan Ulasan Baru:")
+
+		var temp Ulasan
+		fmt.Print("ID Ulasan                             : ")
+		fmt.Scan(&temp.ID)
+		fmt.Print("Nama Penulis (Gunakan _ untuk spasi)  : ")
+		fmt.Scan(&temp.Penulis)
+		fmt.Print("Ketik ulasan (Gunakan _ untuk spasi)  : ")
+		fmt.Scan(&temp.Komentar)
+		fmt.Print("Rating (Contoh: 4.5)                  : ")
+		fmt.Scan(&temp.Rating)
+
+		dataCoworking.Ulasan[dataCoworking.JmlUlasan] = temp
+		dataCoworking.JmlUlasan++
+
+		fmt.Printf("\n✅ Ulasan dari \"%s\" berhasil ditambahkan!\n\n", temp.Penulis)
+
+		/* ============================================================================================================ */
+		cetakUlasan(dataCoworking)
+
+		fmt.Println("Apakah masih ada ulasan yang ingin anda tambah?")
+		fmt.Println("1. Ya")
+		fmt.Println("2. Tidak")
+		fmt.Print("Masukkan pilihan : ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			continue
+		} else if pilihan == 2 {
+			break
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			break
+		}
+	}
+}
+
+func editUlasan(A *tabCoworking, n int) {
+	for {
+		cetakCoworking(*A, n)
+
+		var id string
+		fmt.Print("\nMasukkan ID Co-Working Space yang ulasannya mau diedit: ")
+		fmt.Scan(&id)
+
+		indeks := searchByID(*A, n, id)
+
+		if indeks == -1 {
+			fmt.Println("Gagal: ID tidak ditemukan!")
+			return
+		}
+
+		var dataCoworking = &A[indeks]
+
+		if dataCoworking.JmlUlasan == 0 {
+			fmt.Println("Gagal: Tempat ini belum memiliki ulasan untuk diedit.")
+			return
+		}
+
+		cetakUlasan(dataCoworking)
+
+		var idUlasan int
+		fmt.Print("\nMasukkan ID ulasan yang mau diedit: ")
+		fmt.Scan(&idUlasan)
+
+		// Cari indeks ulasan yang ingin diedit
+		idxUlasan := -1
+		for i := 0; i < dataCoworking.JmlUlasan; i++ {
+			if dataCoworking.Ulasan[i].ID == idUlasan {
+				idxUlasan = i
+				break
+			}
+		}
+
+		idUlasanLama := dataCoworking.Ulasan[idxUlasan].ID
+
+		fmt.Println("Masukkan data ulasan baru:")
+		fmt.Print("Penulis baru  : ")
+		fmt.Scan(&dataCoworking.Ulasan[idxUlasan].Penulis)
+		fmt.Print("Komentar baru : ")
+		fmt.Scan(&dataCoworking.Ulasan[idxUlasan].Komentar)
+		fmt.Print("Rating baru   : ")
+		fmt.Scan(&dataCoworking.Ulasan[idxUlasan].Rating)
+
+		dataCoworking.Ulasan[idxUlasan].ID = idUlasanLama
+
+		fmt.Println("\n✅ Ulasan berhasil diperbarui!\n")
+
+		/* ============================================================================================================ */
+		cetakUlasan(dataCoworking)
+
+		fmt.Println("Apakah masih ada ulasan yang ingin anda edit?")
+		fmt.Println("1. Ya")
+		fmt.Println("2. Tidak")
+		fmt.Print("Masukkan pilihan : ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			continue
+		} else if pilihan == 2 {
+			break
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			break
+		}
+	}
+}
+
+func hapusUlasan(A *tabCoworking, n int) {
+	for {
+		cetakCoworking(*A, n)
+
+		var id string
+		fmt.Print("Masukkan ID Co-Working Space yang ulasannya mau dihapus: ")
+		fmt.Scan(&id)
+
+		indeks := searchByID(*A, n, id)
+
+		if indeks == -1 {
+			fmt.Println("Gagal: ID tidak ditemukan!")
+			return
+		}
+
+		var dataCoworking = &A[indeks]
+
+		if dataCoworking.JmlUlasan == 0 {
+			fmt.Println("Gagal: Tempat ini belum memiliki ulasan untuk diedit.")
+			return
+		}
+
+		cetakUlasan(dataCoworking)
+
+		var idUlasan int
+		fmt.Print("\nMasukkan ID ulasan yang mau dihapus: ")
+		fmt.Scan(&idUlasan)
+
+		idxUlasan := -1
+		for i := 0; i < dataCoworking.JmlUlasan; i++ {
+			if dataCoworking.Ulasan[i].ID == idUlasan {
+				idxUlasan = i
+				break
+			}
+		}
+
+		for i := idxUlasan; i < dataCoworking.JmlUlasan-1; i++ {
+			dataCoworking.Ulasan[i] = dataCoworking.Ulasan[i+1]
+		}
+
+		dataCoworking.Ulasan[dataCoworking.JmlUlasan-1] = Ulasan{}
+		dataCoworking.JmlUlasan--
+
+		fmt.Printf("\n✅ Ulasan dari \"%s\" berhasil dihapus!\n\n", dataCoworking.Ulasan[idxUlasan].Penulis)
+
+		/* ============================================================================================================ */
+		cetakUlasan(dataCoworking)
+
+		fmt.Println("Apakah masih ada ulasan yang ingin anda hapus?")
+		fmt.Println("1. Ya")
+		fmt.Println("2. Tidak")
+		fmt.Print("Masukkan pilihan : ")
+		var pilihan int
+		fmt.Scan(&pilihan)
+		fmt.Println()
+
+		if pilihan == 1 {
+			continue
+		} else if pilihan == 2 {
+			break
+		} else {
+			fmt.Println("Pilihan tidak valid!")
+			break
+		}
+	}
+}
+
 func searchByID(A tabCoworking, n int, x string) int {
 	var idx, i int
 
@@ -745,10 +863,32 @@ func sortingLokasi(A *tabCoworking, n int) {
 
 }
 
-//func sortingHargaSewa() {
-//
-//}
-//
-//func sortingRating() {
-//
-//}
+func sortingHargaSewa(A *tabCoworking, n int) {
+	for pass := 1; pass <= n-1; pass++ {
+		idx := pass - 1
+
+		for i := pass; i < n; i++ {
+			if A[i].HargaSewa > A[idx].HargaSewa {
+				idx = i
+			}
+		}
+
+		temp := A[pass-1]
+		A[pass-1] = A[idx]
+		A[idx] = temp
+	}
+}
+
+func sortingRating(A *tabCoworking, n int) {
+	for pass := 1; pass < n; pass++ {
+		i := pass
+		temp := A[pass]
+
+		for i > 0 && temp.Rating < A[i-1].Rating {
+			A[i] = A[i-1]
+			i--
+		}
+
+		A[i] = temp
+	}
+}
