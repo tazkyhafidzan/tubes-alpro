@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 const (
@@ -34,14 +33,116 @@ type tabCoworking [CoworkingMax]CoworkingSpace
 type tabUlasan [UlasanMax]Ulasan
 
 func main() {
-	mainMenu()
-}
-
-func mainMenu() {
+	// Data Dummy
 	var dataCoworking tabCoworking
 	var nData int
 
-	for {
+	nData = 8
+
+	dataCoworking[0] = CoworkingSpace{
+		ID:           "CS001",
+		Nama:         "Ruang Kreatif",
+		Lokasi:       "Jakarta",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "Kopi", "AC"},
+		JmlFasilitas: 3,
+		HargaSewa:    150000,
+		Rating:       4.5,
+		JmlUlasan:    2,
+	}
+	dataCoworking[0].Ulasan[0] = Ulasan{ID: "U001", Penulis: "Budi", Komentar: "Tempat nyaman", Rating: 4.5}
+	dataCoworking[0].Ulasan[1] = Ulasan{ID: "U002", Penulis: "Siti", Komentar: "Internet cepat", Rating: 4.5}
+
+	dataCoworking[1] = CoworkingSpace{
+		ID:           "CS002",
+		Nama:         "Focus Hub",
+		Lokasi:       "Bandung",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "Printer", "AC", "Whiteboard"},
+		JmlFasilitas: 4,
+		HargaSewa:    120000,
+		Rating:       4.8,
+		JmlUlasan:    1,
+	}
+	dataCoworking[1].Ulasan[0] = Ulasan{ID: "U003", Penulis: "Andi", Komentar: "Tenang sekali", Rating: 4.8}
+
+	dataCoworking[2] = CoworkingSpace{
+		ID:           "CS003",
+		Nama:         "Sinergi Space",
+		Lokasi:       "Yogyakarta",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "Kopi", "Meeting Room"},
+		JmlFasilitas: 3,
+		HargaSewa:    90000,
+		Rating:       4.2,
+		JmlUlasan:    1,
+	}
+	dataCoworking[2].Ulasan[0] = Ulasan{ID: "U004", Penulis: "Rian", Komentar: "Murah dan strategis", Rating: 4.2}
+
+	dataCoworking[3] = CoworkingSpace{
+		ID:           "CS004",
+		Nama:         "Workify",
+		Lokasi:       "Surabaya",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "AC", "Loker"},
+		JmlFasilitas: 3,
+		HargaSewa:    130000,
+		Rating:       4.0,
+		JmlUlasan:    1,
+	}
+	dataCoworking[3].Ulasan[0] = Ulasan{ID: "U005", Penulis: "Dewi", Komentar: "Standar tapi oke", Rating: 4.0}
+
+	dataCoworking[4] = CoworkingSpace{
+		ID:           "CS005",
+		Nama:         "Nexa Lab",
+		Lokasi:       "Semarang",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "Projector", "AC"},
+		JmlFasilitas: 3,
+		HargaSewa:    110000,
+		Rating:       4.6,
+		JmlUlasan:    1,
+	}
+	dataCoworking[4].Ulasan[0] = Ulasan{ID: "U006", Penulis: "Eko", Komentar: "Fasilitas lengkap", Rating: 4.6}
+
+	dataCoworking[5] = CoworkingSpace{
+		ID:           "CS006",
+		Nama:         "Co-Zone",
+		Lokasi:       "Bandung",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "Kopi", "Free Parking"},
+		JmlFasilitas: 3,
+		HargaSewa:    100000,
+		Rating:       4.3,
+		JmlUlasan:    1,
+	}
+	dataCoworking[5].Ulasan[0] = Ulasan{ID: "U007", Penulis: "Mega", Komentar: "Kopinya enak", Rating: 4.3}
+
+	dataCoworking[6] = CoworkingSpace{
+		ID:           "CS007",
+		Nama:         "The Hive",
+		Lokasi:       "Jakarta",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "Pool Access", "AC", "Cafe"},
+		JmlFasilitas: 4,
+		HargaSewa:    250000,
+		Rating:       4.9,
+		JmlUlasan:    1,
+	}
+	dataCoworking[6].Ulasan[0] = Ulasan{ID: "U008", Penulis: "John", Komentar: "Great view and internet", Rating: 4.9}
+
+	dataCoworking[7] = CoworkingSpace{
+		ID:           "CS008",
+		Nama:         "Nomad Corner",
+		Lokasi:       "Yogyakarta",
+		Fasilitas:    [FasilitasMax]string{"WiFi", "AC"},
+		JmlFasilitas: 2,
+		HargaSewa:    95000,
+		Rating:       4.1,
+		JmlUlasan:    1,
+	}
+	dataCoworking[7].Ulasan[0] = Ulasan{ID: "U009", Penulis: "Ali", Komentar: "Cukup memuaskan", Rating: 4.1}
+
+	mainMenu(dataCoworking, nData)
+}
+
+func mainMenu(dataCoworking tabCoworking, nData int) {
+	var lanjut bool = true
+
+	for lanjut {
 		fmt.Println("----------------------------------------------------------")
 		fmt.Println("|     APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE     |")
 		fmt.Println("|                Created By Tazky & Ratna                |")
@@ -86,10 +187,9 @@ func mainMenu() {
 		} else if pilihan == 5 {
 			cariMenu(dataCoworking, nData)
 		} else if pilihan == 6 {
-			break
+			lanjut = false
 		} else {
 			fmt.Println("Pilihan tidak valid!")
-			continue
 		}
 	}
 }
@@ -261,7 +361,9 @@ func hapusUlasan(A *tabCoworking, n int) {
 }
 
 func cariMenu(A tabCoworking, n int) {
-	for {
+	var lanjut bool = true
+
+	for lanjut {
 		fmt.Println("----------------------------------------------------------")
 		fmt.Println("|     APLIKASI MANAJEMEN DAN REVIEW CO-WORKING SPACE     |")
 		fmt.Println("|                Created By Tazky & Ratna                |")
@@ -278,25 +380,61 @@ func cariMenu(A tabCoworking, n int) {
 		fmt.Scan(&pilihan)
 		fmt.Println()
 
-		cetakCoworking(A, n)
-
 		if pilihan == 1 {
+			cetakCoworking(A, n)
+
 			var x string
 			fmt.Print("Masukkan Nama Co-Working Space: ")
 			fmt.Scan(&x)
 
-			indeks := searchByNama(A, n, strings.ToLower(x))
+			indeks := searchByNama(A, n, x)
 
 			if indeks == -1 {
 				break
 			}
 
-			detailCoworking(A, indeks)
+			// Cetak Coworking yang sudah dicari
+			fmt.Printf("%-5s | %-5s | %-20s | %-15s | %-10s | %-6s\n",
+				"No", "ID", "Nama", "Lokasi", "Harga Sewa", "Rating")
+			fmt.Println("----------------------------------------------------------------------------")
+
+			fmt.Printf("%-5d | %-5s | %-20s | %-15s | Rp%-8d | %-6.1f\n",
+				1, A[indeks].ID, A[indeks].Nama, A[indeks].Lokasi, A[indeks].HargaSewa, A[indeks].Rating)
+
+			fmt.Println()
+
+		} else if pilihan == 2 {
+			cetakCoworking(A, n)
+
+			var x string
+			fmt.Print("Masukkan Lokasi Co-Working Space: ")
+			fmt.Scan(&x)
+
+			sortingLokasi(&A, n)
+			indeks := searchByLokasi(A, n, x)
+
+			for indeks > 0 && A[indeks-1].Lokasi == x {
+				indeks--
+			}
+
+			// Cetak Coworking yang berdasarkan lokasi yang dicari dan sudah diurutkan
+			fmt.Printf("%-5s | %-5s | %-20s | %-15s | %-10s | %-6s\n",
+				"No", "ID", "Nama", "Lokasi", "Harga Sewa", "Rating")
+			fmt.Println("----------------------------------------------------------------------------")
+
+			no := 1
+			for i := indeks; i < n && A[i].Lokasi == x; i++ {
+				fmt.Printf("%-5d | %-5s | %-20s | %-15s | Rp%-8d | %-6.1f\n",
+					no, A[i].ID, A[i].Nama, A[i].Lokasi, A[i].HargaSewa, A[i].Rating)
+				no++
+			}
+			fmt.Println()
+
 		} else if pilihan == 0 {
-			break
+			lanjut = false
 		} else {
 			fmt.Println("Pilihan tidak valid!")
-			break
+			lanjut = false
 		}
 	}
 }
@@ -308,9 +446,10 @@ func detailCoworking(A tabCoworking, indeks int) {
 	fmt.Printf("ID        : %s\n", A[indeks].ID)
 	fmt.Printf("Nama      : %s\n", A[indeks].Nama)
 	fmt.Printf("Lokasi    : %s\n", A[indeks].Lokasi)
-	fmt.Printf("Harga     : Rp%d\n", A[indeks].HargaSewa)
-	fmt.Printf("Rating    : %.1f\n", A[indeks].Rating)
+	fmt.Printf("Harga     : Rp%d / hari\n", A[indeks].HargaSewa)
+	fmt.Printf("Rating    : %.1f / 5.0\n", A[indeks].Rating)
 
+	// Cetak Fasilitas
 	fmt.Print("Fasilitas : ")
 	if A[indeks].JmlFasilitas == 0 {
 		fmt.Print("-")
@@ -322,7 +461,19 @@ func detailCoworking(A tabCoworking, indeks int) {
 		}
 		fmt.Print(A[indeks].Fasilitas[i])
 	}
-	fmt.Println("\n---------------------------------------\n")
+	fmt.Println()
+
+	// Cetak Ulasan
+	fmt.Printf("Ulasan    : %d ulasan\n", A[indeks].JmlUlasan)
+	if A[indeks].JmlUlasan > 0 {
+		fmt.Println("---------------------------------------")
+		for i := 0; i < A[indeks].JmlUlasan; i++ {
+			u := A[indeks].Ulasan[i]
+			fmt.Printf("  [%s] %s (%.1f★)\n", u.ID, u.Penulis, u.Rating)
+			fmt.Printf("       \"%s\"\n", u.Komentar)
+		}
+	}
+	fmt.Println("---------------------------------------\n")
 }
 
 func cetakCoworking(A tabCoworking, n int) {
@@ -538,7 +689,7 @@ func searchByNama(A tabCoworking, n int, x string) int {
 	i = 0
 
 	for idx == -1 && i < n {
-		if strings.ToLower(A[i].Nama) == x {
+		if A[i].Nama == x {
 			idx = i
 		}
 
@@ -548,10 +699,56 @@ func searchByNama(A tabCoworking, n int, x string) int {
 	return idx
 }
 
-//func binSearchByLokasi() int {
+func searchByLokasi(A tabCoworking, n int, x string) int {
+	var left, right, mid int
+	var idx int
+
+	left = 0
+	right = n - 1
+	idx = -1
+
+	for left <= right && idx == -1 {
+		mid = (left + right) / 2
+
+		if x < A[mid].Lokasi {
+			right = mid - 1
+		} else if x > A[mid].Lokasi {
+			left = mid + 1
+		} else {
+			idx = mid
+		}
+	}
+
+	return idx
+}
+
+func sortingLokasi(A *tabCoworking, n int) {
+	var temp tabCoworking
+
+	for i := 0; i < n; i++ {
+		temp[i] = A[i]
+	}
+
+	for i := 1; i < n; i++ {
+		kunci := temp[i]
+		j := i - 1
+		for j >= 0 && temp[j].Lokasi > kunci.Lokasi {
+			temp[j+1] = temp[j]
+			j--
+		}
+		temp[j+1] = kunci
+	}
+
+	for i := 0; i < n; i++ {
+		A[i] = temp[i]
+	}
+
+}
+
+//func sortingHargaSewa() {
 //
 //}
 //
-//func sorting() {
+//func sortingRating() {
 //
 //}
