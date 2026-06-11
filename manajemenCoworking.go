@@ -154,10 +154,11 @@ func mainMenu(dataCoworking tabCoworking, nData int) {
 		fmt.Println("|          5. Kelola Ulasan                              |")
 		fmt.Println("|          6. Pencarian                                  |")
 		fmt.Println("|          7. Pengurutan                                 |")
+		fmt.Println("|          8. Filter Berdasarkan Fasilitas               |")
 		fmt.Println("|          0. Keluar                                     |")
 		fmt.Println("----------------------------------------------------------")
 
-		fmt.Print("Masukkan pilihan (1-7), ketik 0 untuk keluar: ")
+		fmt.Print("Masukkan pilihan (1-8), ketik 0 untuk keluar: ")
 		var pilihan int
 		fmt.Scan(&pilihan)
 		fmt.Println()
@@ -191,6 +192,8 @@ func mainMenu(dataCoworking tabCoworking, nData int) {
 			cariMenu(dataCoworking, nData)
 		} else if pilihan == 7 {
 			sortMenu(dataCoworking, nData)
+		} else if pilihan == 8 {
+			filterFasilitas(dataCoworking, nData)
 		} else if pilihan == 0 {
 			fmt.Println("Terima kasih sudah menggunakan aplikasi ini")
 			lanjut = false
@@ -618,6 +621,7 @@ func tambahUlasan(A *tabCoworking, n *int) {
 
 		dataCoworking.Ulasan[dataCoworking.JmlUlasan] = temp
 		dataCoworking.JmlUlasan++
+		hitungRating(A, indeks)
 
 		fmt.Printf("\n✅ Ulasan dari \"%s\" berhasil ditambahkan!\n\n", temp.Penulis)
 
@@ -691,6 +695,7 @@ func editUlasan(A *tabCoworking, n int) {
 		fmt.Scan(&dataCoworking.Ulasan[idxUlasan].Rating)
 
 		dataCoworking.Ulasan[idxUlasan].ID = idUlasanLama
+		hitungRating(A, indeks)
 
 		fmt.Println("\n✅ Ulasan berhasil diperbarui!\n")
 
@@ -890,5 +895,52 @@ func sortingRating(A *tabCoworking, n int) {
 		}
 
 		A[i] = temp
+	}
+}
+
+func hitungRating(A *tabCoworking, indeks int) {
+	if A[indeks].JmlUlasan == 0 {
+		A[indeks].Rating = 0
+		return
+	}
+	total := 0.0
+	for i := 0; i < A[indeks].JmlUlasan; i++ {
+		total += A[indeks].Ulasan[i].Rating
+	}
+	A[indeks].Rating = total / float64(A[indeks].JmlUlasan)
+}
+
+func filterFasilitas(A tabCoworking, n int) {
+	cetakCoworking(A, n)
+
+	var fasilitasDicari string
+	fmt.Print("Masukkan fasilitas yang dicari (contoh: WiFi): ")
+	fmt.Scan(&fasilitasDicari)
+
+	ditemukan := false
+	no := 1
+
+	fmt.Println("===========================================================================")
+	fmt.Printf("  Filter fasilitas: \"%s\"\n", fasilitasDicari)
+	fmt.Println("===========================================================================")
+	fmt.Printf("%-5s %-5s %-20s %-15s %-12s %-6s\n", "No", "ID", "Nama", "Lokasi", "Harga/hari", "Rating")
+	fmt.Println("===========================================================================")
+
+	for i := 0; i < n; i++ {
+		temp := A[i]
+		for j := 0; j < temp.JmlFasilitas; j++ {
+			if temp.Fasilitas[j] == fasilitasDicari {
+				fmt.Printf("%-5d %-5s %-20s %-15s Rp%-10.0d %-6.1f\n",
+					no, temp.ID, temp.Nama, temp.Lokasi, temp.HargaSewa, temp.Rating)
+				no++
+				ditemukan = true
+				break
+			}
+		}
+	}
+	fmt.Println()
+
+	if !ditemukan {
+		fmt.Printf("  Tidak ada co-working space dengan fasilitas \"%s\".\n\n", fasilitasDicari)
 	}
 }
